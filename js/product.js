@@ -19,12 +19,17 @@ const buttonsDiv = document.getElementById("buttons-div");
 
 // --- FUNCTIONS ---
 
-async function fetchProducts() {
+async function fetchProduct() {
   try {
-    const response = await fetch(URL_ENDPOINT);
-    if (!response.ok) {
-      throw new Error();
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+      moviesContainer.textContent = "Something went wrong with the id";
+      return;
     }
+
+    const response = await fetch(`${URL_ENDPOINT}/${id}`);
     const result = await response.json();
     movieData = result.data;
     const movieDataJSON = JSON.stringify(movieData);
@@ -35,7 +40,7 @@ async function fetchProducts() {
   }
 }
 
-async function createMovieCards(apiData) {
+async function createMovieCard(apiData) {
   console.log("apiData:", apiData);
 
   // Create constants for the values in the data
@@ -115,18 +120,11 @@ async function createMovieCards(apiData) {
   }
 }
 
-function addToCart(event) {
-  const target = event.target;
-  if (target.classList.includes === "add-to-cart-button") {
-    console.log("Poop");
-  }
-}
-
-async function displayProducts() {
+async function displayProduct() {
   // Get data from API
-  await fetchProducts();
+  await fetchProduct();
   // Creating the HTML for the movie cards
-  const createdMovies = await createMovieCards(movieData);
+  const createdMovie = await createMovieCard(movieData);
 }
 
 // --- EVENT LISTENERS ---
@@ -138,4 +136,4 @@ async function displayProducts() {
 // This is where we will call the initial function to fetch the data
 // and render the page for the first time.
 
-displayProducts();
+displayProduct();
