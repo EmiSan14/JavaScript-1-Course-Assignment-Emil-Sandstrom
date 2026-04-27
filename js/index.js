@@ -15,6 +15,7 @@ let movieData = [];
 // interact with, like containers and buttons.
 
 const moviesContainer = document.getElementById("movies-container");
+const buttonsDiv = document.getElementById("buttons-div");
 
 // --- FUNCTIONS ---
 
@@ -26,50 +27,105 @@ async function fetchProducts() {
     }
     const result = await response.json();
     movieData = result.data;
-    console.log("movieData:", movieData);
+    const movieDataJSON = JSON.stringify(movieData);
+    localStorage.setItem("movieData", movieDataJSON);
   } catch (error) {
     // Add DOM-manipulation here later
     console.log("Error", error.message);
   }
 }
-fetchProducts();
 
-function displayProducts() {
-  // Get data from API
-  fetchProducts();
-  // Create HTML elements from API-data
-  for (let i = 0; i < movieData.length; i++) {
-    const imageUrlValue = movieData[i].image.url;
-    const imageAltValue = movieData[i].image.alt;
-    const titleValue = movieData[i].title;
-    const descriptionValue = movieData[i].description;
-    const ratingValue = movieData[i].rating;
-    const releasedValue = movieData[i].released;
-    if (movieData[i].onSale === true) {
-      const priceValue = movieData[i].discountedPrice;
-    } else {
-      const priceValue = movieData[i].price;
-    }
-    const imageUrl;
-    imageUrl.textContent = imageUrlValue;
-    const imageAltValue;
-    imageAlt.textContent = imageAltValue;
-    const title;
+async function createMovieCards(apiData) {
+  console.log("apiData:", apiData);
+  // Create constants for the values in the data
+  for (let i = 0; i < apiData.length; i++) {
+    const imageUrlValue = apiData[i].image.url;
+    const imageAltValue = apiData[i].image.alt;
+    const titleValue = apiData[i].title;
+    const descriptionValue = apiData[i].description;
+    const genreValue = apiData[i].genre;
+    const ratingValue = apiData[i].rating;
+    const releasedValue = apiData[i].released;
+    const priceValue = apiData[i].discountedPrice;
+
+    // creating the HTML elements and adding the values to them
+    const movieDiv = document.createElement("div");
+    movieDiv.classList.add("movie-card");
+    const image = document.createElement("img");
+    // Set src and alt for the image created
+    image.setAttribute("src", imageUrlValue);
+    image.setAttribute("alt", imageAltValue);
+    const title = document.createElement("h3");
     title.textContent = titleValue;
-    const description;
+    const description = document.createElement("p");
     description.textContent = descriptionValue;
-    const rating;
-    rating.textContent = ratingValue;
-    const released;
-    released.textContent = releasedValue;
-    const price;
-    price.textContent = priceValue;
+    const genre = document.createElement("p");
+    genre.textContent = `Genre: ${genreValue}`;
+    const rating = document.createElement("p");
+    rating.textContent = `Rating: ${ratingValue}`;
+    const released = document.createElement("p");
+    released.textContent = `Released: ${releasedValue}`;
+    const priceDiscounted = document.createElement("p");
+    priceDiscounted.textContent = `Price: ${priceValue} NOK `;
+    const buttonsDiv = document.createElement("div");
+    // Putting both buttons in a container for placement
+    buttonsDiv.classList.add("buttons-div");
+    buttonsDiv.setAttribute("id", "buttons-div");
+    const addToCartButton = document.createElement("button");
+    addToCartButton.textContent = "add to cart";
+    addToCartButton.setAttribute("class", "add-to-cart-button");
+    const detailsButton = document.createElement("button");
+    detailsButton.textContent = "details";
     // Append to moviesContainer
+    movieDiv.appendChild(image);
+    movieDiv.appendChild(title);
+    movieDiv.appendChild(description);
+    movieDiv.appendChild(genre);
+    movieDiv.appendChild(rating);
+    movieDiv.appendChild(released);
+    // Prices will both be shown if there is a discounted price
+    if (apiData[i].onSale === true) {
+      const priceNormalValue = apiData[i].price;
+      const priceDiscountedValueSpan = document.createElement("span");
+      const priceNormalValueSpan = document.createElement("span");
+      // Show both discounted price and non-discounted to see difference
+      // and then also put a line through it w CSS
+      priceDiscountedValueSpan.textContent = `${priceValue} NOK`;
+      priceNormalValueSpan.textContent = `${priceNormalValue}`;
+      priceNormalValueSpan.classList.add("discounted");
+      priceDiscounted.textContent = "Price: ";
+      priceDiscounted.appendChild(priceNormalValueSpan);
+      priceDiscounted.appendChild(priceDiscountedValueSpan);
+    }
+    movieDiv.appendChild(priceDiscounted);
+    buttonsDiv.appendChild(addToCartButton);
+    buttonsDiv.appendChild(detailsButton);
+    movieDiv.appendChild(buttonsDiv);
+    moviesContainer.appendChild(movieDiv);
   }
+}
+
+function addToCart(event) {
+  const target = event.target;
+  if (target.classList.includes === "add-to-cart-button") {
+    console.log("Poop");
+  }
+}
+
+async function displayProducts() {
+  // Get data from API
+  await fetchProducts();
+  // Creating the HTML for the movie cards
+  const createdMovies = await createMovieCards(movieData);
 }
 
 // --- EVENT LISTENERS ---
 
+// Add product-data to localStorage since it's being so annoying
+buttonsDiv.addEventListener("click", addToCart(event));
+
 // --- INITIAL LOAD ---
 // This is where we will call the initial function to fetch the data
 // and render the page for the first time.
+
+displayProducts();
