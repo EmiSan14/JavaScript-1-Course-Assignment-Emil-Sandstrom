@@ -1,5 +1,8 @@
 "use strict";
 
+import * as imported from "./exports.js";
+console.log(imported.addToCart);
+
 // DON'T FORGET!!!!
 // REMOVE ALL CONSOLE LOGS BEFORE SUBMITTING
 
@@ -9,32 +12,44 @@
 
 const URL_ENDPOINT = "https://v2.api.noroff.dev/square-eyes";
 let movieData = [];
+let cart = [];
 
 // --- DOM ELEMENTS ---
 // This is where we will select the elements from the HTML that we need to
 // interact with, like containers and buttons.
 
 const moviesContainer = document.getElementById("movies-container");
-const buttonsDiv = document.getElementById("buttons-div");
+const anchorDiv = document.querySelector("anchor-div");
 
 // --- FUNCTIONS ---
 
+// Add Error message or do basic one below
+/**
+ * Fetches API-data
+ */
 async function fetchProducts() {
   try {
     const response = await fetch(URL_ENDPOINT);
     if (!response.ok) {
+      moviesContainer.textContent = "Something went wrong when fetching data";
       throw new Error();
     }
     const result = await response.json();
     movieData = result.data;
     const movieDataJSON = JSON.stringify(movieData);
-    localStorage.setItem("movieData", movieDataJSON);
+    // localStorage.setItem("movieData", movieDataJSON);
   } catch (error) {
     // Add DOM-manipulation here later
     console.log("Error", error.message);
   }
 }
 
+// !!! Delete out-commented values when ready !!!
+/**
+ * Takes fetched API-data and creates cards for the
+ * movies with its basic info to the DOM
+ * @param {Array} apiData
+ */
 async function createMovieCards(apiData) {
   console.log("apiData:", apiData);
 
@@ -43,10 +58,12 @@ async function createMovieCards(apiData) {
     const imageUrlValue = apiData[i].image.url;
     const imageAltValue = apiData[i].image.alt;
     const titleValue = apiData[i].title;
+    /*
     const descriptionValue = apiData[i].description;
     const genreValue = apiData[i].genre;
     const ratingValue = apiData[i].rating;
     const releasedValue = apiData[i].released;
+    */
     const priceValue = apiData[i].discountedPrice;
 
     // creating the HTML elements and adding the values to them
@@ -59,6 +76,7 @@ async function createMovieCards(apiData) {
     image.setAttribute("alt", imageAltValue);
     const title = document.createElement("h3");
     title.textContent = titleValue;
+    /*
     const description = document.createElement("p");
     description.textContent = descriptionValue;
     const genre = document.createElement("p");
@@ -67,31 +85,40 @@ async function createMovieCards(apiData) {
     rating.textContent = `Rating: ${ratingValue}`;
     const released = document.createElement("p");
     released.textContent = `Released: ${releasedValue}`;
+    */
     const priceDiscounted = document.createElement("p");
     priceDiscounted.textContent = `Price: ${priceValue} NOK `;
-    const buttonsDiv = document.createElement("div");
+    const anchorDiv = document.createElement("div");
 
     // Putting both buttons in a container for placement
-    buttonsDiv.classList.add("buttons-div");
-    buttonsDiv.setAttribute("id", "buttons-div");
+    anchorDiv.classList.add("anchor-div");
+    anchorDiv.setAttribute("class", "anchor-div");
     const addToCartButton = document.createElement("button");
     addToCartButton.textContent = "add to cart";
     addToCartButton.setAttribute("class", "add-to-cart-button");
-    const detailsButton = document.createElement("button");
-    detailsButton.textContent = "details";
-    detailsButton.setAttribute(
+    // Toast message when adding to cart
+    addToCartButton.addEventListener("click", () => {
+      const apiDataProduct = apiData[i];
+      addToCartToast(titleValue);
+      addToCart(apiDataProduct);
+    });
+    const detailsAnchor = document.createElement("a");
+    detailsAnchor.textContent = "details";
+    detailsAnchor.setAttribute(
       "href",
       `product/index.html?id=${apiData[i].id}`,
     );
-    console.log(detailsButton);
+    // detailsButton.href = `product/index.html?id=${apiData[i].id}`;
 
     // Append to moviesContainer
     movieDiv.appendChild(image);
     movieDiv.appendChild(title);
+    /*
     movieDiv.appendChild(description);
     movieDiv.appendChild(genre);
     movieDiv.appendChild(rating);
     movieDiv.appendChild(released);
+    */
 
     // Prices will both be shown if there is a discounted price
     if (apiData[i].onSale === true) {
@@ -108,17 +135,49 @@ async function createMovieCards(apiData) {
       priceDiscounted.appendChild(priceDiscountedValueSpan);
     }
     movieDiv.appendChild(priceDiscounted);
-    buttonsDiv.appendChild(addToCartButton);
-    buttonsDiv.appendChild(detailsButton);
-    movieDiv.appendChild(buttonsDiv);
+    anchorDiv.appendChild(addToCartButton);
+    anchorDiv.appendChild(detailsAnchor);
+    movieDiv.appendChild(anchorDiv);
     moviesContainer.appendChild(movieDiv);
   }
 }
 
-function addToCart(event) {
-  const target = event.target;
-  if (target.classList.includes === "add-to-cart-button") {
-    console.log("Poop");
+/**
+ * Used as callback for dynamically
+ * added event listener on cart buttons.
+ * @param {Array<Object>.title} data - The title of the movie
+ * gets added here (data) to show user what they added to cart
+ * with a toast notification
+ */
+export function addToCartToast(data) {
+  const toastDiv = document.getElementById("toast-container");
+  toastDiv.classList.remove("hidden");
+  const toastMessage = document.createElement("p");
+  toastMessage.textContent = `Added ${data} to cart!`;
+  toastDiv.appendChild(toastMessage);
+
+  setTimeout(() => {
+    toastDiv.classList.add("hidden");
+    toastMessage.classList.add("hidden");
+  }, 3000);
+}
+
+/**
+ * Adds specific product to the cart and saves it in
+ * localStorage on event listener in createMovieCards function
+ * @param {Array<Object>} product - The full singular product
+ * with all its separate values included
+ */
+export function addToCart(product) {
+  cart.push(product);
+  const jsonCart = JSON.stringify(cart);
+  localStorage.setItem("cart", jsonCart);
+}
+
+export function loadCart() {
+  const filledCart = localStorage.getItem("cart");
+  if (filledCart) {
+    cart = JSON.parse(filledCart);
   }
 }
 
@@ -131,11 +190,9 @@ async function displayProducts() {
 
 // --- EVENT LISTENERS ---
 
-// Add product-data to localStorage since it's being so annoying
-// buttonsDiv.addEventListener("click", addToCart(event));
-
 // --- INITIAL LOAD ---
 // This is where we will call the initial function to fetch the data
 // and render the page for the first time.
 
 displayProducts();
+loadCart();

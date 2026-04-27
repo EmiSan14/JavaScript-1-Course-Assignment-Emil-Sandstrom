@@ -32,8 +32,6 @@ async function fetchProduct() {
     const response = await fetch(`${URL_ENDPOINT}/${id}`);
     const result = await response.json();
     movieData = result.data;
-    const movieDataJSON = JSON.stringify(movieData);
-    localStorage.setItem("movieData", movieDataJSON);
   } catch (error) {
     // Add DOM-manipulation here later
     console.log("Error", error.message);
@@ -44,80 +42,70 @@ async function createMovieCard(apiData) {
   console.log("apiData:", apiData);
 
   // Create constants for the values in the data
-  for (let i = 0; i < apiData.length; i++) {
-    const imageUrlValue = apiData[i].image.url;
-    const imageAltValue = apiData[i].image.alt;
-    const titleValue = apiData[i].title;
-    const descriptionValue = apiData[i].description;
-    const genreValue = apiData[i].genre;
-    const ratingValue = apiData[i].rating;
-    const releasedValue = apiData[i].released;
-    const priceValue = apiData[i].discountedPrice;
+  const imageUrlValue = apiData.image.url;
+  const imageAltValue = apiData.image.alt;
+  const titleValue = apiData.title;
+  const descriptionValue = apiData.description;
+  const genreValue = apiData.genre;
+  const ratingValue = apiData.rating;
+  const releasedValue = apiData.released;
+  const priceValue = apiData.discountedPrice;
 
-    // creating the HTML elements and adding the values to them
-    const movieDiv = document.createElement("div");
-    movieDiv.classList.add("movie-card");
-    const image = document.createElement("img");
+  // creating the HTML elements and adding the values to them
+  const movieDiv = document.createElement("div");
+  movieDiv.classList.add("movie-card");
+  const image = document.createElement("img");
 
-    // Set src and alt for the image created
-    image.setAttribute("src", imageUrlValue);
-    image.setAttribute("alt", imageAltValue);
-    const title = document.createElement("h3");
-    title.textContent = titleValue;
-    const description = document.createElement("p");
-    description.textContent = descriptionValue;
-    const genre = document.createElement("p");
-    genre.textContent = `Genre: ${genreValue}`;
-    const rating = document.createElement("p");
-    rating.textContent = `Rating: ${ratingValue}`;
-    const released = document.createElement("p");
-    released.textContent = `Released: ${releasedValue}`;
-    const priceDiscounted = document.createElement("p");
-    priceDiscounted.textContent = `Price: ${priceValue} NOK `;
-    const buttonsDiv = document.createElement("div");
+  // Set src and alt for the image created
+  image.setAttribute("src", imageUrlValue);
+  image.setAttribute("alt", imageAltValue);
+  const title = document.createElement("h3");
+  title.textContent = titleValue;
+  const description = document.createElement("p");
+  description.textContent = descriptionValue;
+  const genre = document.createElement("p");
+  genre.textContent = `Genre: ${genreValue}`;
+  const rating = document.createElement("p");
+  rating.textContent = `Rating: ${ratingValue}`;
+  const released = document.createElement("p");
+  released.textContent = `Released: ${releasedValue}`;
+  const priceDiscounted = document.createElement("p");
+  priceDiscounted.textContent = `Price: ${priceValue} NOK `;
+  const anchorDiv = document.createElement("div");
 
-    // Putting both buttons in a container for placement
-    buttonsDiv.classList.add("buttons-div");
-    buttonsDiv.setAttribute("id", "buttons-div");
-    const addToCartButton = document.createElement("button");
-    addToCartButton.textContent = "add to cart";
-    addToCartButton.setAttribute("class", "add-to-cart-button");
-    const detailsButton = document.createElement("button");
-    detailsButton.textContent = "details";
-    detailsButton.setAttribute(
-      "href",
-      `product/index.html?id=${apiData[i].id}`,
-    );
-    console.log(detailsButton);
+  // Putting both buttons in a container for placement
+  anchorDiv.classList.add("anchor-div");
+  anchorDiv.setAttribute("class", "anchor-div");
+  const addToCartAnchor = document.createElement("a");
+  addToCartAnchor.textContent = "add to cart";
+  addToCartAnchor.setAttribute("class", "add-to-cart-button");
 
-    // Append to moviesContainer
-    movieDiv.appendChild(image);
-    movieDiv.appendChild(title);
-    movieDiv.appendChild(description);
-    movieDiv.appendChild(genre);
-    movieDiv.appendChild(rating);
-    movieDiv.appendChild(released);
+  // Append to moviesContainer
+  movieDiv.appendChild(image);
+  movieDiv.appendChild(title);
+  movieDiv.appendChild(description);
+  movieDiv.appendChild(genre);
+  movieDiv.appendChild(rating);
+  movieDiv.appendChild(released);
 
-    // Prices will both be shown if there is a discounted price
-    if (apiData[i].onSale === true) {
-      const priceNormalValue = apiData[i].price;
-      const priceDiscountedValueSpan = document.createElement("span");
-      const priceNormalValueSpan = document.createElement("span");
-      // Show both discounted price and non-discounted to see difference
-      // and then also put a line through it w CSS
-      priceDiscountedValueSpan.textContent = `${priceValue} NOK`;
-      priceNormalValueSpan.textContent = `${priceNormalValue}`;
-      priceNormalValueSpan.classList.add("discounted");
-      priceDiscounted.textContent = "Price: ";
-      priceDiscounted.appendChild(priceNormalValueSpan);
-      priceDiscounted.appendChild(priceDiscountedValueSpan);
-    }
-    movieDiv.appendChild(priceDiscounted);
-    buttonsDiv.appendChild(addToCartButton);
-    buttonsDiv.appendChild(detailsButton);
-    movieDiv.appendChild(buttonsDiv);
-    moviesContainer.appendChild(movieDiv);
+  // Prices will both be shown if there is a discounted price
+  if (apiData.onSale === true) {
+    const priceNormalValue = apiData.price;
+    const priceDiscountedValueSpan = document.createElement("span");
+    const priceNormalValueSpan = document.createElement("span");
+    // Show both discounted price and non-discounted to see difference
+    // and then also put a line through it w CSS
+    priceDiscountedValueSpan.textContent = `${priceValue} NOK`;
+    priceNormalValueSpan.textContent = `${priceNormalValue}`;
+    priceNormalValueSpan.classList.add("discounted");
+    priceDiscounted.textContent = "Price: ";
+    priceDiscounted.appendChild(priceNormalValueSpan);
+    priceDiscounted.appendChild(priceDiscountedValueSpan);
   }
+  movieDiv.appendChild(priceDiscounted);
+  anchorDiv.appendChild(addToCartAnchor);
+  movieDiv.appendChild(anchorDiv);
+  moviesContainer.appendChild(movieDiv);
 }
 
 async function displayProduct() {
