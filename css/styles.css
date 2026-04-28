@@ -38,7 +38,8 @@ footer {
   background-color: var(--movie-card-color);
 }
 
-.movies-container {
+.movies-container,
+.cart-container {
   width: 90%;
   margin: auto;
   display: flex;
@@ -46,11 +47,19 @@ footer {
   justify-content: space-between;
 }
 
+.movie-card,
+.in-cart-movie-card {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
 .movie-card {
   width: 45%;
-  padding: 0.5rem;
   box-shadow: 0 10px 16px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
+}
+
+.in-cart-movie-card {
+  width: 18%;
 }
 
 .discounted {
@@ -70,4 +79,8 @@ footer {
   background-color: #fff;
   padding: 0.2rem;
   border: 1px solid #000;
+}
+
+.in-cart-movie-card {
+  width: 18%;
 }

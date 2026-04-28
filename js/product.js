@@ -1,5 +1,7 @@
 "use strict";
 
+import * as imported from "./exports.js";
+
 // DON'T FORGET!!!!
 // REMOVE ALL CONSOLE LOGS BEFORE SUBMITTING
 
@@ -76,9 +78,16 @@ async function createMovieCard(apiData) {
   // Putting both buttons in a container for placement
   anchorDiv.classList.add("anchor-div");
   anchorDiv.setAttribute("class", "anchor-div");
-  const addToCartAnchor = document.createElement("a");
-  addToCartAnchor.textContent = "add to cart";
-  addToCartAnchor.setAttribute("class", "add-to-cart-button");
+  const addToCartButton = document.createElement("button");
+  addToCartButton.textContent = "add to cart";
+  addToCartButton.setAttribute("class", "add-to-cart-button");
+  // Adding to cart incl. toast message
+  addToCartButton.addEventListener("click", () => {
+    const apiDataProduct = apiData;
+    imported.addToCartToast(titleValue);
+    imported.addToCart(apiDataProduct);
+    imported.loadCart();
+  });
 
   // Append to moviesContainer
   movieDiv.appendChild(image);
@@ -103,7 +112,7 @@ async function createMovieCard(apiData) {
     priceDiscounted.appendChild(priceDiscountedValueSpan);
   }
   movieDiv.appendChild(priceDiscounted);
-  anchorDiv.appendChild(addToCartAnchor);
+  anchorDiv.appendChild(addToCartButton);
   movieDiv.appendChild(anchorDiv);
   moviesContainer.appendChild(movieDiv);
 }

@@ -99,8 +99,9 @@ async function createMovieCards(apiData) {
     // Toast message when adding to cart
     addToCartButton.addEventListener("click", () => {
       const apiDataProduct = apiData[i];
-      addToCartToast(titleValue);
-      addToCart(apiDataProduct);
+      imported.addToCartToast(titleValue);
+      imported.addToCart(apiDataProduct);
+      imported.loadCart();
     });
     const detailsAnchor = document.createElement("a");
     detailsAnchor.textContent = "details";
@@ -149,6 +150,7 @@ async function createMovieCards(apiData) {
  * gets added here (data) to show user what they added to cart
  * with a toast notification
  */
+/*
 export function addToCartToast(data) {
   const toastDiv = document.getElementById("toast-container");
   toastDiv.classList.remove("hidden");
@@ -161,25 +163,28 @@ export function addToCartToast(data) {
     toastMessage.classList.add("hidden");
   }, 3000);
 }
-
+*/
 /**
  * Adds specific product to the cart and saves it in
  * localStorage on event listener in createMovieCards function
  * @param {Array<Object>} product - The full singular product
  * with all its separate values included
  */
+/*
 export function addToCart(product) {
   cart.push(product);
   const jsonCart = JSON.stringify(cart);
   localStorage.setItem("cart", jsonCart);
 }
-
+*/
+/*
 export function loadCart() {
   const filledCart = localStorage.getItem("cart");
   if (filledCart) {
     cart = JSON.parse(filledCart);
   }
 }
+*/
 
 async function displayProducts() {
   // Get data from API
@@ -194,5 +199,6 @@ async function displayProducts() {
 // This is where we will call the initial function to fetch the data
 // and render the page for the first time.
 
+imported.loadCart();
 displayProducts();
-loadCart();
+console.log(localStorage.getItem("cart"));
