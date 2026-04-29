@@ -83,10 +83,9 @@ async function createMovieCard(apiData) {
   addToCartButton.setAttribute("class", "add-to-cart-button");
   // Adding to cart incl. toast message
   addToCartButton.addEventListener("click", () => {
-    const apiDataProduct = apiData;
-    imported.addToCartToast(titleValue);
-    imported.addToCart(apiDataProduct);
     imported.loadCart();
+    imported.addToCartToast(titleValue);
+    imported.addToCart(apiData);
   });
 
   // Append to moviesContainer

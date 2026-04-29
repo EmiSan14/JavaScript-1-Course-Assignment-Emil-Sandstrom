@@ -1,7 +1,6 @@
 "use strict";
 
 import * as imported from "./exports.js";
-console.log(imported.addToCart);
 
 // DON'T FORGET!!!!
 // REMOVE ALL CONSOLE LOGS BEFORE SUBMITTING
@@ -12,7 +11,13 @@ console.log(imported.addToCart);
 
 const URL_ENDPOINT = "https://v2.api.noroff.dev/square-eyes";
 let movieData = [];
+const dataForTotalPages = await fetchProducts();
 let cart = [];
+let currentPage = 1;
+const itemsPerPage = 4;
+const totalPages = Math.ceil(dataForTotalPages.length / itemsPerPage);
+
+// 7.1 - Intro to Client-Side Pagination
 
 // --- DOM ELEMENTS ---
 // This is where we will select the elements from the HTML that we need to
@@ -37,6 +42,7 @@ async function fetchProducts() {
     const result = await response.json();
     movieData = result.data;
     const movieDataJSON = JSON.stringify(movieData);
+    return movieData;
     // localStorage.setItem("movieData", movieDataJSON);
   } catch (error) {
     // Add DOM-manipulation here later
@@ -51,8 +57,6 @@ async function fetchProducts() {
  * @param {Array} apiData
  */
 async function createMovieCards(apiData) {
-  console.log("apiData:", apiData);
-
   // Create constants for the values in the data
   for (let i = 0; i < apiData.length; i++) {
     const imageUrlValue = apiData[i].image.url;
@@ -96,7 +100,7 @@ async function createMovieCards(apiData) {
     const addToCartButton = document.createElement("button");
     addToCartButton.textContent = "add to cart";
     addToCartButton.setAttribute("class", "add-to-cart-button");
-    // Toast message when adding to cart
+    // Adding to cart incl. toast message
     addToCartButton.addEventListener("click", () => {
       const apiDataProduct = apiData[i];
       imported.addToCartToast(titleValue);
@@ -201,4 +205,3 @@ async function displayProducts() {
 
 imported.loadCart();
 displayProducts();
-console.log(localStorage.getItem("cart"));

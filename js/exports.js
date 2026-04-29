@@ -79,7 +79,6 @@ export function addToCart(product) {
  * reload
  */
 export function removeFromCart(arrayIndex) {
-  // const newCart = cart.splice(product); // Needs to keep values not deleted
   const newCart = cart.filter((index) => {
     return index !== arrayIndex;
   });
@@ -100,8 +99,19 @@ export function loadCart() {
   }
 }
 
+export function clearCart() {
+  const filledCart = localStorage.getItem("cart");
+  if (filledCart) {
+    localStorage.removeItem("cart");
+  }
+}
+
 export function hideItem(item) {
   item.classList.add("hidden");
+}
+
+export function removeItem(item) {
+  item.remove();
 }
 
 export function inCaseOfEmptyCart(cartArray, htmlDiv) {
@@ -110,6 +120,11 @@ export function inCaseOfEmptyCart(cartArray, htmlDiv) {
     newPElement.textContent = "Your cart is empty";
     htmlDiv.appendChild(newPElement);
   }
+}
+
+export function readLength(element) {
+  const length = element.length;
+  return length;
 }
 
 export function calculatePrice(cartArray) {
@@ -126,4 +141,5 @@ export function confirmPurchase(divToAppendTo, url) {
   confirmPurchaseAnchor.textContent = "confirm purchase";
   confirmPurchaseAnchor.setAttribute("href", url);
   divToAppendTo.appendChild(confirmPurchaseAnchor);
+  return confirmPurchaseAnchor;
 }

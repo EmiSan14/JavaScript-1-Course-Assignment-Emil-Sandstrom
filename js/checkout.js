@@ -7,6 +7,8 @@ const cartContainer = document.getElementById("cart-container");
 const PAYMENT_CONFIRM_ENDPOINT = "../checkout/confirmation/index.html";
 
 function createCart() {
+  const cartDiv = document.createElement("div");
+  cartDiv.classList.add("cart-container");
   const storedCart = imported.loadCart();
   const cartText = document.createElement("p");
 
@@ -29,14 +31,6 @@ function createCart() {
     }
   }
 
-  const finalCartLength = storedCart.length - cartCounter;
-  const cartLength = document.createElement("p");
-  if (finalCartLength === 0) {
-    imported.hideItem(cartLength);
-  }
-  cartLength.textContent = `You have ${finalCartLength} item(s) in your cart`;
-  cartContainer.appendChild(cartLength);
-
   for (let i = 0; i < storedCart.length; i++) {
     if (storedCart[i] === null) {
       continue;
@@ -49,6 +43,8 @@ function createCart() {
     // creating the HTML elements and adding the values to them
     const movieDiv = document.createElement("div");
     movieDiv.classList.add("in-cart-movie-card");
+    const idNumber = i;
+    movieDiv.setAttribute("id", `id-nr-${idNumber}`);
     const image = document.createElement("img");
 
     // Set src and alt for the image created
@@ -64,20 +60,10 @@ function createCart() {
     // Putting both buttons in a container for placement
     anchorDiv.classList.add("anchor-div");
     anchorDiv.setAttribute("class", "anchor-div");
+
+    // Remove-button
     const removeFromCartButton = document.createElement("button");
     removeFromCartButton.textContent = "remove from cart";
-
-    // Removing an item from the cart
-    const cartProductIndex = storedCart[i];
-    removeFromCartButton.addEventListener("click", () => {
-      console.log("cartProductIndex:", cartProductIndex);
-      imported.removeFromCartToast(titleValue);
-      const newCart = imported.removeFromCart(cartProductIndex);
-      imported.loadCart();
-      imported.hideItem(movieDiv);
-      imported.hideItem(cartLength);
-      imported.inCaseOfEmptyCart(newCart, cartContainer);
-    });
 
     // Anchor for detailed product-page
     const detailsAnchor = document.createElement("a");
@@ -109,17 +95,50 @@ function createCart() {
     anchorDiv.appendChild(removeFromCartButton);
     anchorDiv.appendChild(detailsAnchor);
     movieDiv.appendChild(anchorDiv);
-    cartContainer.appendChild(movieDiv);
+    cartDiv.appendChild(movieDiv);
+    cartContainer.appendChild(cartDiv);
+
+    // Removing an item from the cart
+    const cartProductIndex = storedCart[i];
+    removeFromCartButton.addEventListener("click", () => {
+      imported.removeFromCartToast(titleValue);
+      // const newCart = imported.removeFromCart(cartProductIndex);
+      imported.removeFromCart(cartProductIndex);
+      cartDiv.innerHTML = "";
+      imported.removeItem(cartDiv);
+      imported.removeItem(cartLength);
+      imported.removeItem(cartPrice);
+      imported.removeItem(confirmPurchaseAnchor);
+      // const newCart = imported.loadCart();
+      cartLength.textContent = imported.readLength(finalCartLength);
+      // imported.inCaseOfEmptyCart(newCart, cartContainer);
+      createCart();
+    });
   }
+
+  const finalCartLength = storedCart.length - cartCounter;
+  const cartLength = document.createElement("p");
+  if (finalCartLength === 0) {
+    imported.removeItem(cartLength);
+  } else {
+    cartLength.textContent = `You have ${finalCartLength} item(s) in your cart`;
+  }
+  cartContainer.appendChild(cartLength);
 
   // Total price for the cart
   const totalCartPrice = imported.calculatePrice(storedCart);
   const cartPrice = document.createElement("p");
   cartPrice.textContent = `Total Price: ${totalCartPrice} NOK`;
+  if (totalCartPrice < 0.01) {
+    return;
+  } else {
+    cartContainer.appendChild(cartPrice);
+  }
 
-  cartContainer.appendChild(cartPrice);
-
-  imported.confirmPurchase(cartContainer, PAYMENT_CONFIRM_ENDPOINT);
+  const confirmPurchaseAnchor = imported.confirmPurchase(
+    cartContainer,
+    PAYMENT_CONFIRM_ENDPOINT,
+  );
 }
 
 function updatePage() {
