@@ -6,19 +6,16 @@ let cart = [];
 const cartContainer = document.getElementById("cart-container");
 const PAYMENT_CONFIRM_ENDPOINT = "../checkout/confirmation/index.html";
 
+/**
+ * Populates DOM with cart-items
+ * @returns - Stops if there is nothing in cart.
+ */
 function createCart() {
   const cartDiv = document.createElement("div");
   cartDiv.classList.add("cart-container");
   const storedCart = imported.loadCart();
-  const cartText = document.createElement("p");
 
   imported.inCaseOfEmptyCart(storedCart, cartContainer);
-  /*
-  if (storedCart.length === 0) {
-    cartText.textContent = "Your cart is empty";
-    cartContainer.appendChild(cartText);
-  }
-  */
 
   // Deduct null values from cart length to give actual length
   // Then add length of cart to DOM
@@ -102,16 +99,13 @@ function createCart() {
     const cartProductIndex = storedCart[i];
     removeFromCartButton.addEventListener("click", () => {
       imported.removeFromCartToast(titleValue);
-      // const newCart = imported.removeFromCart(cartProductIndex);
       imported.removeFromCart(cartProductIndex);
       cartDiv.innerHTML = "";
       imported.removeItem(cartDiv);
       imported.removeItem(cartLength);
       imported.removeItem(cartPrice);
       imported.removeItem(confirmPurchaseAnchor);
-      // const newCart = imported.loadCart();
       cartLength.textContent = imported.readLength(finalCartLength);
-      // imported.inCaseOfEmptyCart(newCart, cartContainer);
       createCart();
     });
   }
@@ -139,10 +133,6 @@ function createCart() {
     cartContainer,
     PAYMENT_CONFIRM_ENDPOINT,
   );
-}
-
-function updatePage() {
-  createCart();
 }
 
 const createdCart = createCart();

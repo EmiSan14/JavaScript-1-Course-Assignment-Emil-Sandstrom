@@ -13,14 +13,14 @@
   <body>
     <header>
       <nav>
-        <a href="checkout/index.html">tempCheckout</a>
         <a href="index.html">Home</a>
         <form id="search-form">
+          <label for="search-input" class="hidden">Search Movies</label>
           <input type="search" id="search-input" placeholder="Search Movies" />
         </form>
         <a
           class="shopping-cart-container"
-          href="cart.html"
+          href="checkout/index.html"
           aria-label="go to cart"
         >
           <img
@@ -37,7 +37,9 @@
       <h1>Square Eyes</h1>
       <h2>Movies:</h2>
       <div id="filter-container">
-        <!-- Add filter-options w JS -->
+        <form id="filter-form">
+          <!-- Filter-checkboxes get added here -->
+        </form>
       </div>
       <div class="movies-container" id="movies-container">
         <!-- Add movie-cards w JS -->
@@ -45,6 +47,9 @@
       <div id="pagination-container">
         <!-- Add pagination-controls w JS -->
         <button id="prev-button">Previous</button>
+        <div id="numbered-pages-container">
+          <!-- Numbered buttons get added here -->
+        </div>
         <button id="next-button">Next</button>
       </div>
     </main>

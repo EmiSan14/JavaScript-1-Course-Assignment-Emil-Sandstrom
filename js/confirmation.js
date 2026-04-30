@@ -5,6 +5,11 @@ import * as imported from "./exports.js";
 let cart = [];
 const confirmationContainer = document.getElementById("confirmation-container");
 
+/**
+ * Takes whatever was in the cart and creates
+ * simulated confirmation message with details
+ * about purchase and items.
+ */
 function purchaseConfirmationScreen() {
   const paidItems = imported.loadCart();
 
@@ -83,8 +88,10 @@ function purchaseConfirmationScreen() {
   continueShoppingAnchor.setAttribute("href", "../../index.html");
   confirmationContainer.appendChild(continueShoppingAnchor);
 
-  // Clear the cart
-  imported.clearCart();
+  // Clear the cart for immersion
+  continueShoppingAnchor.addEventListener("click", () => {
+    imported.clearCart();
+  });
 }
 
 purchaseConfirmationScreen();

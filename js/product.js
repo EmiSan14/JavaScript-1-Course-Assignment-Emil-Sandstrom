@@ -22,6 +22,7 @@ const buttonsDiv = document.getElementById("buttons-div");
 // --- FUNCTIONS ---
 
 async function fetchProduct() {
+  moviesContainer.innerHTML = '<div class="spinner"></div>';
   try {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
@@ -33,94 +34,118 @@ async function fetchProduct() {
 
     const response = await fetch(`${URL_ENDPOINT}/${id}`);
     const result = await response.json();
-    movieData = result.data;
+    return (movieData = result.data);
   } catch (error) {
-    // Add DOM-manipulation here later
-    console.log("Error", error.message);
+    const errorP = document.createElement("p");
+    errorP.textContent =
+      "Something went wrong when fetching data. Try again later.";
+    moviesContainer.appendChild(errorP);
+  } finally {
+    const spinner = document.querySelector(".spinner");
+    spinner.classList.add("hidden");
   }
 }
 
 async function createMovieCard(apiData) {
-  console.log("apiData:", apiData);
+  try {
+    console.log("apiData:", apiData);
 
-  // Create constants for the values in the data
-  const imageUrlValue = apiData.image.url;
-  const imageAltValue = apiData.image.alt;
-  const titleValue = apiData.title;
-  const descriptionValue = apiData.description;
-  const genreValue = apiData.genre;
-  const ratingValue = apiData.rating;
-  const releasedValue = apiData.released;
-  const priceValue = apiData.discountedPrice;
+    // Create constants for the values in the data
+    const imageUrlValue = apiData.image.url;
+    const imageAltValue = apiData.image.alt;
+    const titleValue = apiData.title;
+    const descriptionValue = apiData.description;
+    const genreValue = apiData.genre;
+    const ratingValue = apiData.rating;
+    const releasedValue = apiData.released;
+    const priceValue = apiData.discountedPrice;
 
-  // creating the HTML elements and adding the values to them
-  const movieDiv = document.createElement("div");
-  movieDiv.classList.add("movie-card");
-  const image = document.createElement("img");
+    // creating the HTML elements and adding the values to them
+    const movieDiv = document.createElement("div");
+    movieDiv.classList.add("movie-card");
+    const image = document.createElement("img");
 
-  // Set src and alt for the image created
-  image.setAttribute("src", imageUrlValue);
-  image.setAttribute("alt", imageAltValue);
-  const title = document.createElement("h3");
-  title.textContent = titleValue;
-  const description = document.createElement("p");
-  description.textContent = descriptionValue;
-  const genre = document.createElement("p");
-  genre.textContent = `Genre: ${genreValue}`;
-  const rating = document.createElement("p");
-  rating.textContent = `Rating: ${ratingValue}`;
-  const released = document.createElement("p");
-  released.textContent = `Released: ${releasedValue}`;
-  const priceDiscounted = document.createElement("p");
-  priceDiscounted.textContent = `Price: ${priceValue} NOK `;
-  const anchorDiv = document.createElement("div");
+    // Set src and alt for the image created
+    image.setAttribute("src", imageUrlValue);
+    image.setAttribute("alt", imageAltValue);
+    const title = document.createElement("h3");
+    title.textContent = titleValue;
+    const description = document.createElement("p");
+    description.textContent = descriptionValue;
+    const genre = document.createElement("p");
+    genre.textContent = `Genre: ${genreValue}`;
+    const rating = document.createElement("p");
+    rating.textContent = `Rating: ${ratingValue}`;
+    const released = document.createElement("p");
+    released.textContent = `Released: ${releasedValue}`;
+    const priceDiscounted = document.createElement("p");
+    priceDiscounted.textContent = `Price: ${priceValue} NOK `;
+    const anchorDiv = document.createElement("div");
 
-  // Putting both buttons in a container for placement
-  anchorDiv.classList.add("anchor-div");
-  anchorDiv.setAttribute("class", "anchor-div");
-  const addToCartButton = document.createElement("button");
-  addToCartButton.textContent = "add to cart";
-  addToCartButton.setAttribute("class", "add-to-cart-button");
-  // Adding to cart incl. toast message
-  addToCartButton.addEventListener("click", () => {
-    imported.loadCart();
-    imported.addToCartToast(titleValue);
-    imported.addToCart(apiData);
-  });
+    // Putting both buttons in a container for placement
+    anchorDiv.classList.add("anchor-div");
+    anchorDiv.setAttribute("class", "anchor-div");
+    const addToCartButton = document.createElement("button");
+    addToCartButton.textContent = "add to cart";
+    addToCartButton.setAttribute("class", "add-to-cart-button");
+    // Adding to cart incl. toast message
+    addToCartButton.addEventListener("click", () => {
+      imported.loadCart();
+      imported.addToCartToast(titleValue);
+      imported.addToCart(apiData);
+    });
 
-  // Append to moviesContainer
-  movieDiv.appendChild(image);
-  movieDiv.appendChild(title);
-  movieDiv.appendChild(description);
-  movieDiv.appendChild(genre);
-  movieDiv.appendChild(rating);
-  movieDiv.appendChild(released);
+    // Append to moviesContainer
+    movieDiv.appendChild(image);
+    movieDiv.appendChild(title);
+    movieDiv.appendChild(description);
+    movieDiv.appendChild(genre);
+    movieDiv.appendChild(rating);
+    movieDiv.appendChild(released);
 
-  // Prices will both be shown if there is a discounted price
-  if (apiData.onSale === true) {
-    const priceNormalValue = apiData.price;
-    const priceDiscountedValueSpan = document.createElement("span");
-    const priceNormalValueSpan = document.createElement("span");
-    // Show both discounted price and non-discounted to see difference
-    // and then also put a line through it w CSS
-    priceDiscountedValueSpan.textContent = `${priceValue} NOK`;
-    priceNormalValueSpan.textContent = `${priceNormalValue}`;
-    priceNormalValueSpan.classList.add("discounted");
-    priceDiscounted.textContent = "Price: ";
-    priceDiscounted.appendChild(priceNormalValueSpan);
-    priceDiscounted.appendChild(priceDiscountedValueSpan);
+    // Prices will both be shown if there is a discounted price
+    if (apiData.onSale === true) {
+      const priceNormalValue = apiData.price;
+      const priceDiscountedValueSpan = document.createElement("span");
+      const priceNormalValueSpan = document.createElement("span");
+      // Show both discounted price and non-discounted to see difference
+      // and then also put a line through it w CSS
+      priceDiscountedValueSpan.textContent = `${priceValue} NOK`;
+      priceNormalValueSpan.textContent = `${priceNormalValue}`;
+      priceNormalValueSpan.classList.add("discounted");
+      priceDiscounted.textContent = "Price: ";
+      priceDiscounted.appendChild(priceNormalValueSpan);
+      priceDiscounted.appendChild(priceDiscountedValueSpan);
+    }
+    movieDiv.appendChild(priceDiscounted);
+    anchorDiv.appendChild(addToCartButton);
+    movieDiv.appendChild(anchorDiv);
+    moviesContainer.appendChild(movieDiv);
+  } catch {
+    const errorP = document.createElement("p");
+    errorP.textContent =
+      "Something went wrong when fetching data. Try again later";
+  } finally {
+    const spinner = document.querySelector(".spinner");
+    spinner.classList.add("hidden");
   }
-  movieDiv.appendChild(priceDiscounted);
-  anchorDiv.appendChild(addToCartButton);
-  movieDiv.appendChild(anchorDiv);
-  moviesContainer.appendChild(movieDiv);
 }
 
 async function displayProduct() {
-  // Get data from API
-  await fetchProduct();
-  // Creating the HTML for the movie cards
-  const createdMovie = await createMovieCard(movieData);
+  moviesContainer.innerHTML = '<div class="spinner"></div>';
+  try {
+    // Get data from API
+    const specMovieData = await fetchProduct();
+    // Creating the HTML for the movie cards
+    const createdMovie = await createMovieCard(specMovieData);
+  } catch (error) {
+    const errorP = document.createElement("p");
+    errorP.textContent =
+      "Something went wrong when fetching data. Try again later";
+  } finally {
+    const spinner = document.querySelector(".spinner");
+    spinner.classList.add("hidden");
+  }
 }
 
 // --- EVENT LISTENERS ---
