@@ -2,9 +2,6 @@
 
 import * as imported from "./exports.js";
 
-// DON'T FORGET!!!!
-// REMOVE ALL CONSOLE LOGS BEFORE SUBMITTING
-
 // --- STATE ---
 // This is where we will store the application's data, like the list of all games
 // and the current state of pagination and filters.
@@ -48,8 +45,6 @@ async function fetchProduct() {
 
 async function createMovieCard(apiData) {
   try {
-    console.log("apiData:", apiData);
-
     // Create constants for the values in the data
     const imageUrlValue = apiData.image.url;
     const imageAltValue = apiData.image.alt;

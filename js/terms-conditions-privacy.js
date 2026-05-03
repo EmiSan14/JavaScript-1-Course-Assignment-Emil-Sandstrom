@@ -11,7 +11,6 @@ const placeholderText = document.getElementById("placeholder-text");
  */
 async function addContentAndHeader(apiData) {
   termsAndConditionsContainer.innerHTML = '<div class="spinner"></div>';
-  console.log(apiData);
 
   try {
     placeholderText.classList.add("hidden");

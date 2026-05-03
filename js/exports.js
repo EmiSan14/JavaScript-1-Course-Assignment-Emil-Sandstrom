@@ -31,8 +31,9 @@ export async function fetchProducts() {
     movieData = result.data;
     return movieData;
   } catch (error) {
-    // Add DOM-manipulation here later
-    console.log("Error", error.message);
+    const p = document.createElement("p");
+    p.textContent = "Failed to fetch API-Data. Try again";
+    moviesContainer.appendChild("p");
   }
 }
 
