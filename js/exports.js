@@ -36,41 +36,6 @@ export async function fetchProducts() {
   }
 }
 
-// --- HOME-PAGE ---
-
-/**
- *
- * @param {input.value} searchTerm - Whatever gets put
- * into the search-input on the home-page.
- * @returns - The filtered list of items to be read elsewhere
- * and used for updating the HTML.
- */
-export async function filterMovies(searchTerm) {
-  try {
-    if (!searchTerm) {
-      return fetchedData;
-    }
-
-    const filteredList = fetchedData.filter((movie) => {
-      const trimmedSearchTerm = searchTerm.toLowerCase().trim();
-      const nameMatch = movie.title.toLowerCase().includes(trimmedSearchTerm);
-      const descriptionMatch = movie.description
-        .toLowerCase()
-        .includes(trimmedSearchTerm);
-      const genreMatch = movie.genre.toLowerCase().includes(trimmedSearchTerm);
-      return nameMatch || descriptionMatch || genreMatch;
-    });
-
-    return filteredList;
-  } catch (error) {
-    console.log(error);
-    const errorP = document.createElement("p");
-    errorP.textContent =
-      "Something went wrong when fetching data. Try again later.";
-    moviesContainer.appendChild(errorP);
-  }
-}
-
 // --- CART-SPECIFIC ---
 
 /**

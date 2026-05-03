@@ -3,23 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Buy all the latest movies at Square Eyes"
-    />
-    <title>Square Eyes | Purchase Confirmation</title>
-    <link href="../../css/styles.css" rel="stylesheet" />
+    <meta name="description" content="Square Eyes Privacy Policy" />
+    <title>Square Eyes | Privacy Policy</title>
+    <link href="../css/styles.css" rel="stylesheet" />
   </head>
   <body>
     <header>
       <nav>
-        <a href="../../index.html">Home</a>
+        <a href="../index.html">Home</a>
         <form id="search-form">
+          <label for="search-input" class="hidden">Search Movies</label>
           <input type="search" id="search-input" placeholder="Search Movies" />
         </form>
         <a
           class="shopping-cart-container"
-          href="../index.html"
+          href="../checkout/index.html"
           aria-label="go to cart"
         >
           <img
@@ -31,18 +29,19 @@
         </a>
       </nav>
     </header>
-    <main id="confirmation-main">
+    <main>
       <div class="hidden toast-container" id="toast-container"></div>
       <h1>Square Eyes</h1>
-      <h2>Purchase Confirmation:</h2>
-      <div class="confirmation-container" id="confirmation-container">
-        <!-- Add w JS -->
+      <h2>Privacy Policy (Placeholder):</h2>
+      <div class="terms-and-conditions" id="terms-and-conditions-container">
+        <p id="placeholder-text">This would be replaced with data</p>
+        <!-- Content added dynamically to headers -->
       </div>
     </main>
     <footer>
-      <a href="../../footer/terms-and-conditions.html">Terms and Conditions</a>
-      <a href="../../footer/privacy-policy.html">Privacy Policy</a>
+      <a href="terms-and-conditions.html">Terms and Conditions</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
     </footer>
-    <script src="../../js/confirmation.js" type="module"></script>
+    <script src="../js/terms-conditions-privacy.js" type="module"></script>
   </body>
 </html>
