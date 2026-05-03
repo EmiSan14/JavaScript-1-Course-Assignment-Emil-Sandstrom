@@ -3,15 +3,11 @@
 import * as imported from "./exports.js";
 
 // --- STATE ---
-// This is where we will store the application's data, like the list of all games
-// and the current state of pagination and filters.
 
 const URL_ENDPOINT = "https://v2.api.noroff.dev/square-eyes";
 let movieData = [];
 
 // --- DOM ELEMENTS ---
-// This is where we will select the elements from the HTML that we need to
-// interact with, like containers and buttons.
 
 const moviesContainer = document.getElementById("movies-container");
 const buttonsDiv = document.getElementById("buttons-div");
@@ -144,9 +140,6 @@ async function displayProduct() {
 }
 
 // --- EVENT LISTENERS ---
-
-// Add product-data to localStorage since it's being so annoying
-// buttonsDiv.addEventListener("click", addToCart(event));
 
 // --- INITIAL LOAD ---
 // This is where we will call the initial function to fetch the data

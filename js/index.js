@@ -3,8 +3,6 @@
 import * as imported from "./exports.js";
 
 // --- STATE ---
-// This is where we will store the application's data, like the list of all games
-// and the current state of pagination and filters.
 
 const URL_ENDPOINT = "https://v2.api.noroff.dev/square-eyes";
 let movieData = [];
@@ -323,11 +321,7 @@ async function displayProducts() {
   try {
     searchInput.value = "";
     // Get data from API
-    // const fullMovieList = await fetchProducts();
     const fullMovieList = await imported.fetchProducts();
-    // Creating the HTML for the movie cards
-    // const createdMovies = await createMovieCards(movieData);
-    // await pagePagination(fullMovieList, currentPage);
     await pagePagination(fullMovieList, currentPage);
   } catch (error) {
     const errorP = document.createElement("p");
