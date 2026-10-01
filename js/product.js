@@ -54,6 +54,7 @@ async function createMovieCard(apiData) {
     // creating the HTML elements and adding the values to them
     const movieDiv = document.createElement("div");
     movieDiv.classList.add("movie-card");
+    movieDiv.setAttribute("id", "movie-card-product");
     const image = document.createElement("img");
 
     // Set src and alt for the image created

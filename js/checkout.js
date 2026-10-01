@@ -32,10 +32,11 @@ function createCart() {
     if (storedCart[i] === null) {
       continue;
     }
-    const imageUrlValue = storedCart[i].image.url;
-    const imageAltValue = storedCart[i].image.alt;
-    const titleValue = storedCart[i].title;
-    const priceValue = storedCart[i].discountedPrice;
+    const imageUrlValue = storedCart[i].item.image.url;
+    const imageAltValue = storedCart[i].item.image.alt;
+    const titleValue = storedCart[i].item.title;
+    const priceValue = storedCart[i].item.discountedPrice;
+    const quantityValue = storedCart[i].quantity;
 
     // creating the HTML elements and adding the values to them
     const movieDiv = document.createElement("div");
@@ -50,8 +51,17 @@ function createCart() {
     const title = document.createElement("h3");
     title.textContent = titleValue;
 
+    const quantity = document.createElement("p");
+    quantity.textContent = `Quantity: ${quantityValue}`;
+
     const priceDiscounted = document.createElement("p");
+    const priceTotal = document.createElement("p");
+    const priceTimesQuantity = parseFloat(priceValue * quantityValue);
     priceDiscounted.textContent = `Price: ${priceValue} NOK `;
+    priceTotal.textContent = `Total price: ${priceTimesQuantity.toFixed(2)} NOK `;
+
+    const infoDiv = document.createElement("div");
+    infoDiv.classList.add("cart-info-div");
     const anchorDiv = document.createElement("div");
 
     // Putting both buttons in a container for placement
@@ -60,19 +70,19 @@ function createCart() {
 
     // Remove-button
     const removeFromCartButton = document.createElement("button");
-    removeFromCartButton.textContent = "remove from cart";
+    removeFromCartButton.textContent = "remove";
 
     // Anchor for detailed product-page
     const detailsAnchor = document.createElement("a");
     detailsAnchor.textContent = "details";
     detailsAnchor.setAttribute(
       "href",
-      `../product/index.html?id=${storedCart[i].id}`,
+      `../product/index.html?id=${storedCart[i].item.id}`,
     );
 
     // Append to moviesContainer
     movieDiv.appendChild(image);
-    movieDiv.appendChild(title);
+    infoDiv.appendChild(title);
 
     // Prices will both be shown if there is a discounted price
     if (storedCart[i].onSale === true) {
@@ -88,7 +98,10 @@ function createCart() {
       priceDiscounted.appendChild(priceNormalValueSpan);
       priceDiscounted.appendChild(priceDiscountedValueSpan);
     }
-    movieDiv.appendChild(priceDiscounted);
+    infoDiv.appendChild(priceDiscounted);
+    infoDiv.appendChild(quantity);
+    infoDiv.appendChild(priceTotal);
+    movieDiv.appendChild(infoDiv);
     anchorDiv.appendChild(removeFromCartButton);
     anchorDiv.appendChild(detailsAnchor);
     movieDiv.appendChild(anchorDiv);

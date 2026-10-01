@@ -80,14 +80,60 @@ export function removeFromCartToast(data) {
 }
 
 /**
- * Adds specific product to the cart and saves it in
+ * Adds specific product to the cart after checking whether
+ * it exists in the cart before and saves it/adds quantity in
  * localStorage on event listener in createMovieCards function
  * @param {Array<Object>} product - The full singular product
  * with all its separate values included
  */
 export function addToCart(product) {
-  cart.push(product);
-  const jsonCart = JSON.stringify(cart);
+  const cartFromStorage = loadCart();
+  const onlyItems = [];
+
+  if (cartFromStorage.length === 0) {
+    const cartItem = {
+      item: product,
+      quantity: 1,
+    };
+    cartFromStorage.push(cartItem);
+  } else if (cartFromStorage.length === 1) {
+    if (cartFromStorage[0].item.id === product.id) {
+      cartFromStorage[0].quantity += 1;
+    } else {
+      const cartItem = {
+        item: product,
+        quantity: 1,
+      };
+      cartFromStorage.push(cartItem);
+      cartFromStorage.forEach((onlyItem) => {
+        onlyItems.push(onlyItem.item);
+      });
+    }
+  } else {
+    console.log("onlyItems:", onlyItems);
+    for (let i = 0; i < cartFromStorage.length; i++) {
+      if (cartFromStorage[i].item.id === product.id) {
+        cartFromStorage[i].quantity += 1;
+      }
+    }
+  }
+  let nr = 0;
+  for (let i = 0; i < cartFromStorage.length; i++) {
+    if (cartFromStorage[i].item.id === product.id) {
+      break;
+    } else {
+      nr += 1;
+      continue;
+    }
+  }
+  if (nr === cartFromStorage.length) {
+    const cartItem = {
+      item: product,
+      quantity: 1,
+    };
+    cartFromStorage.push(cartItem);
+  }
+  const jsonCart = JSON.stringify(cartFromStorage);
   localStorage.setItem("cart", jsonCart);
 }
 
@@ -143,8 +189,12 @@ export function clearCart() {
  */
 export function calculatePrice(cartArray) {
   let totalPrice = 0;
-  cartArray.forEach((item) => {
-    totalPrice += item.discountedPrice;
+  let totalSingularPrice = 0;
+  cartArray.forEach((cartItem) => {
+    totalSingularPrice = 0;
+    totalSingularPrice += cartItem.item.discountedPrice;
+    totalSingularPrice *= cartItem.quantity;
+    totalPrice += totalSingularPrice;
   });
   const finalPrice = totalPrice.toFixed(2);
   return finalPrice;

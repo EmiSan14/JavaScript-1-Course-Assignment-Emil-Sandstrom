@@ -95,6 +95,8 @@ async function createMovieCards(apiData) {
       // creating the HTML elements and adding the values to them
       const movieDiv = document.createElement("div");
       movieDiv.classList.add("movie-card");
+      const movieDivImageAndPrice = document.createElement("div");
+      movieDivImageAndPrice.classList.add("movie-info");
       const image = document.createElement("img");
 
       // Set src and alt for the image created
@@ -129,7 +131,6 @@ async function createMovieCards(apiData) {
 
       // Append to moviesContainer
       movieDiv.appendChild(image);
-      movieDiv.appendChild(title);
 
       // Prices will both be shown if there is a discounted price
       if (apiData[i].onSale === true) {
@@ -145,9 +146,11 @@ async function createMovieCards(apiData) {
         priceDiscounted.appendChild(priceNormalValueSpan);
         priceDiscounted.appendChild(priceDiscountedValueSpan);
       }
-      movieDiv.appendChild(priceDiscounted);
-      anchorDiv.appendChild(addToCartButton);
+      movieDivImageAndPrice.appendChild(title);
+      movieDivImageAndPrice.appendChild(priceDiscounted);
+      movieDiv.appendChild(movieDivImageAndPrice);
       anchorDiv.appendChild(detailsAnchor);
+      anchorDiv.appendChild(addToCartButton);
       movieDiv.appendChild(anchorDiv);
       moviesContainer.appendChild(movieDiv);
     }
@@ -217,6 +220,8 @@ function movieFilters(filteredApiData) {
   filteredApiData.forEach((genre) => {
     const lowercaseGenre = genre.toLowerCase();
 
+    const radioButtonDiv = document.createElement("div");
+
     const newRadioButton = document.createElement("input");
     newRadioButton.setAttribute("type", "radio");
     const idNameAndLabel = `${lowercaseGenre}-radio`;
@@ -228,8 +233,9 @@ function movieFilters(filteredApiData) {
     newRadioLabel.setAttribute("for", idNameAndLabel);
     newRadioLabel.textContent = genre;
 
-    radioFieldset.appendChild(newRadioLabel);
-    radioFieldset.appendChild(newRadioButton);
+    radioButtonDiv.appendChild(newRadioButton);
+    radioButtonDiv.appendChild(newRadioLabel);
+    radioFieldset.appendChild(radioButtonDiv);
 
     const filteredArray = filterMovieByGenre(fetchedData, genre);
 

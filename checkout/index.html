@@ -9,29 +9,32 @@
     />
     <title>Square Eyes | Checkout</title>
     <link href="../css/styles.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Aboreto&family=Monoton&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header>
       <nav>
-        <a href="../index.html">Home</a>
+        <a href="../index.html">
+          <i class="fa-regular fa-house"></i>
+        </a>
         <a
           class="shopping-cart-container"
           href="index.html"
           aria-label="go to cart"
         >
-          <img
-            class="shopping-cart"
-            src=""
-            alt="shopping-cart icon"
-            aria-label="shopping-cart placeholder"
-          />
+          <i class="fa-solid fa-cart-shopping"></i>
         </a>
       </nav>
     </header>
     <main id="cart-main">
       <div class="hidden toast-container" id="toast-container"></div>
-      <h1>Square Eyes</h1>
-      <h2>Checkout:</h2>
+      <h1 class="logo">Square Eyes</h1>
+      <h2>Cart/Checkout:</h2>
       <div class="cart-container" id="cart-container">
         <!-- Adds cart w JS -->
       </div>
@@ -41,5 +44,9 @@
       <a href="../footer/privacy-policy.html">Privacy Policy</a>
     </footer>
     <script src="../js/checkout.js" type="module"></script>
+    <script
+      src="https://kit.fontawesome.com/aa8166dc37.js"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

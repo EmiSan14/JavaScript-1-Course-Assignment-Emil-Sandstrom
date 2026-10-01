@@ -27,23 +27,33 @@ function purchaseConfirmationScreen() {
   const deliveryDate = document.createElement("p");
   deliveryDate.textContent = "Expected delivery: 2 business days";
 
+  const summary = document.createElement("h3");
+  summary.textContent = "Summary:";
+
   confirmationContainer.appendChild(successMessage);
   confirmationContainer.appendChild(detailsBelow);
   confirmationContainer.appendChild(orderId);
   confirmationContainer.appendChild(deliveryDate);
+  confirmationContainer.appendChild(summary);
+
+  const successMovies = document.createElement("div");
+  successMovies.classList.add("success-movies");
 
   for (let i = 0; i < paidItems.length; i++) {
     if (paidItems[i] === null) {
       continue;
     }
-    const imageUrlValue = paidItems[i].image.url;
-    const imageAltValue = paidItems[i].image.alt;
-    const titleValue = paidItems[i].title;
-    const priceValue = paidItems[i].discountedPrice;
+    const imageUrlValue = paidItems[i].item.image.url;
+    const imageAltValue = paidItems[i].item.image.alt;
+    const titleValue = paidItems[i].item.title;
+    const priceValue = paidItems[i].item.discountedPrice;
+    const quantityValue = paidItems[i].quantity;
     // creating the HTML elements and adding the values to them
     const movieDiv = document.createElement("div");
     movieDiv.classList.add("purchase-confirmation-movie-card");
     const image = document.createElement("img");
+    const movieInformationDiv = document.createElement("div");
+    movieInformationDiv.classList.add("movie-info-div-success");
 
     // Set src and alt for the image created
     image.setAttribute("src", imageUrlValue);
@@ -52,10 +62,18 @@ function purchaseConfirmationScreen() {
     title.textContent = titleValue;
 
     const priceDiscounted = document.createElement("p");
+    const priceTotal = document.createElement("p");
+    const priceTimesQuantity = parseFloat(priceValue * quantityValue);
     priceDiscounted.textContent = `Price: ${priceValue} NOK `;
+    priceTotal.textContent = `Total price: ${priceTimesQuantity.toFixed(2)} NOK `;
+
+    const quantity = document.createElement("p");
+    quantity.textContent = `Quantity: ${quantityValue}`;
 
     movieDiv.appendChild(image);
-    movieDiv.appendChild(title);
+
+    movieInformationDiv.appendChild(title);
+    movieDiv.appendChild(movieInformationDiv);
 
     // Make into function
     // Prices will both be shown if there is a discounted price
@@ -72,8 +90,11 @@ function purchaseConfirmationScreen() {
       priceDiscounted.appendChild(priceNormalValueSpan);
       priceDiscounted.appendChild(priceDiscountedValueSpan);
     }
-    movieDiv.appendChild(priceDiscounted);
-    confirmationContainer.appendChild(movieDiv);
+    movieInformationDiv.appendChild(priceDiscounted);
+    movieInformationDiv.appendChild(quantity);
+    movieInformationDiv.appendChild(priceTotal);
+    successMovies.appendChild(movieDiv);
+    confirmationContainer.appendChild(successMovies);
   }
 
   // Total price for the items
