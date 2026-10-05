@@ -1,6 +1,6 @@
 # Square Eyes Movies
 
-SIte allowing for the purchase of movies fetched from Square Eyes API
+Site allowing for the purchase of movies fetched from Square Eyes API
 
 ## Description
 
@@ -36,4 +36,4 @@ https://github.com/EmiSan14/JavaScript-1-Course-Assignment-Emil-Sandstrom.git
 
 ## Contact
 
-[E-Mail](emiloskar14@outlook.com)
+-E-Mail: emiloskar14@outlook.com
