@@ -33,6 +33,7 @@ label,
   font-family: var(--font-secondary);
 }
 
+footer a,
 button,
 .anchor-div a,
 .confirmation-container > a {
@@ -98,6 +99,7 @@ button:hover {
 #search-input {
   border: solid 2px var(--secondary-color);
   border-radius: 4px;
+  padding: 4px;
 }
 
 #search-input:focus {
@@ -229,6 +231,7 @@ footer {
   display: flex;
   flex-wrap: wrap;
   padding: 5px;
+  border-radius: 3px;
 }
 
 .movie-info {
@@ -239,8 +242,9 @@ footer {
 }
 
 .movie-card img {
-  max-height: 180px;
-  object-fit: cover;
+  max-height: 200px;
+  width: 100%;
+  object-fit: contain;
   margin-bottom: 5px;
 }
 
@@ -460,5 +464,118 @@ footer {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* ==== MEDIA QUERIES ==== */
+
+@media screen and (min-width: 414px) {
+  .movie-card img {
+    max-height: 260px;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .movie-card img {
+    max-height: 385px;
+  }
+
+  #movie-card-product {
+    width: 50%;
+    margin: auto;
+  }
+
+  .movie-card h3 {
+    font-size: 18px;
+  }
+
+  .movie-card p {
+    font-size: 14px;
+  }
+
+  .anchor-div a,
+  .anchor-div button,
+  .in-cart-movie-card .anchor-div button {
+    font-size: 16px;
+  }
+
+  .cart-info-div h3,
+  .purchase-confirmation-movie-card h4 {
+    font-size: 18px;
+  }
+
+  .cart-info-div p,
+  .purchase-confirmation-movie-card p {
+    font-size: 14px;
+  }
+
+  footer a {
+    font-size: 20px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .movie-card {
+    width: 23%;
+  }
+
+  .movie-card img {
+    max-height: 220px;
+  }
+
+  .movie-card h3 {
+    font-size: 18px;
+  }
+
+  .movie-card p {
+    font-size: 14px;
+  }
+
+  .anchor-div a,
+  .anchor-div button {
+    font-size: 16px;
+  }
+
+  #filter-form button,
+  #pagination-container button {
+    font-size: 18px;
+  }
+
+  #search-input {
+    font-size: 16px;
+  }
+
+  nav a {
+    font-size: 22px;
+  }
+
+  .cart-container {
+    width: 70%;
+    align-items: center;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  main {
+    width: 80%;
+  }
+
+  .movie-card {
+    padding: 10px 15px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .movie-card img {
+    max-height: 330px;
+  }
+
+  .logo {
+    font-size: 36px;
+  }
+
+  legend {
+    font-size: 19px;
   }
 }
